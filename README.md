@@ -1,0 +1,2 @@
+- - Cuda: CUDA stands for Compute Unified Device Architecture. It’s a parallel computing platform and API created by NVIDIA that allows software to use NVIDIA GPUs to perform general-purpose computation (like training neural networks) — not just graphics.
+- - Cuda Driver: A low-level system component that allows your OS and applications (like PyTorch or TensorFlow) to talk to your NVIDIA GPU.
