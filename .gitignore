@@ -1,0 +1,8 @@
+# Ignore the virtual environment
+c51_venv/
+
+# Ignore temporary files
+__pycache__/
+*.pyc
+.DS_Store
+.ipynb_checkpoints
