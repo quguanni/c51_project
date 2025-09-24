@@ -1,7 +1,0 @@
-- Cuda: CUDA stands for Compute Unified Device Architecture. It’s a parallel computing platform and API created by NVIDIA that allows software to use NVIDIA GPUs to perform general-purpose computation (like training neural networks) — not just graphics.
-- Cuda Driver: A low-level system component that allows your OS and applications (like PyTorch or TensorFlow) to talk to your NVIDIA GPU.
-- CPU: central processing unit that can handle a few tasks at a time but does them quickly and intelligently. It's great for branching logic, OS operations, and single-threaded tasks. It's optimized for low-latency operations.
-- CPU has a few powerful cores and each core is fast and versatile. It's good at handling diverse instructions.
-- GPU: A massively parallel co-processor specialized for math - especially vector and matrix operations.
-- It executes many simple tasks in parallel thousands at once and it's designed for high-throughput, not low-latency.
-- Each core is slower and more specialized and its perfect for single isntruction, multiple data workloads. 

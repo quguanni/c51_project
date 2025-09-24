@@ -1,0 +1,38 @@
+# Core ML/RL libraries
+torch>=2.0.0
+torchvision>=0.15.0
+gymnasium>=0.28.0
+numpy>=1.21.0
+
+# JAX ecosystem
+jax>=0.4.0
+jaxlib>=0.4.0
+flax>=0.6.0
+optax>=0.1.0
+
+# CleanRL utilities
+cleanrl>=0.2.0
+
+# Experiment tracking and visualization
+wandb>=0.15.0
+tensorboard>=2.13.0
+matplotlib>=3.5.0
+seaborn>=0.11.0
+
+# Configuration and CLI
+tyro>=0.5.0
+omegaconf>=2.3.0
+
+# Development and testing
+pytest>=7.0.0
+black>=22.0.0
+flake8>=5.0.0
+mypy>=1.0.0
+
+# Progress bars and utilities
+tqdm>=4.64.0
+collections-extended>=2.0.0
+
+# Optional: Atari environments
+ale-py>=0.8.0
+opencv-python>=4.6.0
