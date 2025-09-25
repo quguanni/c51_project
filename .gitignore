@@ -21,4 +21,11 @@ checkpoints/
 *.pt
 *.pth
 *.ckpt
-
+*.ipynb_checkpoints
+wandb/
+runs/
+checkpoints/
+*.ckpt
+*.pt
+*.pth
+*.log
