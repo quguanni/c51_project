@@ -1,16 +1,24 @@
-# Ignore the virtual environment
-c51_venv/
-
-# Ignore temporary files
+# --- Python / OS ---
 __pycache__/
 *.pyc
 .DS_Store
+
+# --- Virtual envs ---
+c51_venv/
+.venv/
+
+# --- Notebooks / logs ---
 .ipynb_checkpoints
+*.log
 debug.log
 debug-internal.log
-wandb/checkpoints/
+
+# --- RL artifacts (do not track) ---
+wandb/
+runs/
+checkpoints/
+*.wandb
 *.pt
 *.pth
 *.ckpt
-runs/
-*.log
+
