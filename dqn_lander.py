@@ -95,7 +95,7 @@ class ReplayBuffer:
 
 buffer = ReplayBuffer(BUFFER_SIZE)
 
-# ===== DQN Network (same hidden sizes as your C51 MLP) =====
+# ===== DQN Network (same hidden sizes as C51 MLP) =====
 class QNet(nn.Module):
     def __init__(self, state_dim, n_actions):
         super().__init__()
