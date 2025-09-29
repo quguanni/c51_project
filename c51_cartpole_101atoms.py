@@ -12,11 +12,12 @@ from tqdm import trange
 # ----- 0) W&B init -----
 wandb.init(
     project="c51-project",
-    name="c51-cartpole-100atoms",
+    name="c51-cartpole_101atoms",
+    group="ablation",
     config=dict(
         env_id="CartPole-v1",
         seed=42,
-        n_atoms=51,
+        n_atoms=101,
         v_min=0.0,
         v_max=120.0,
         gamma=0.99,

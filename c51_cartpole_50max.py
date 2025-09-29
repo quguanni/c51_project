@@ -1,4 +1,4 @@
-# train_cartpole_c51.py
+# c51_cartpole_150support.py
 import os, random, math
 import numpy as np
 import torch
@@ -12,13 +12,14 @@ from tqdm import trange
 # ----- 0) W&B init -----
 wandb.init(
     project="c51-project",
-    name="c51-cartpole-100atoms",
+    name="c51-cartpole-50max",
+    group="ablation",
     config=dict(
         env_id="CartPole-v1",
         seed=42,
         n_atoms=51,
         v_min=0.0,
-        v_max=120.0,
+        v_max=50.0,
         gamma=0.99,
         buffer_size=100_000,
         batch_size=128,
@@ -251,5 +252,3 @@ for _ in pbar:
         wandb.save(f"checkpoints/c51_step{global_step}.pt")
 
 env.close(); eval_env.close()
-
-

@@ -11,7 +11,7 @@ import wandb
 wandb.init(
     project="c51-project",
     group="ablation",
-    name="dqn-cartpole",
+    name="dqn-cartpole-5episodes",
     config=dict(
         env_id="CartPole-v1",
         seed=42,
@@ -117,7 +117,7 @@ def train_step():
     return float(loss.item())
 
 # ===== Eval =====
-def eval_policy(n_episodes=15): # changed from 5 to 15
+def eval_policy(n_episodes=5): # changed from 5 to 15
     total = 0.0
     for _ in range(n_episodes):
         o,_ = eval_env.reset()
