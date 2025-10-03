@@ -23,9 +23,9 @@ wandb.init(
         epsilon_end=0.01,
         epsilon_decay_steps=25_000,
         target_update_interval=500,
-        train_start=5_000, # changed from 1_000 to 5_000
+        train_start=5_000, # bigger number means warmer start to reduce noisy updates, feel free to change this number
         train_freq=1,
-        max_steps=200_000,
+        max_steps=200_000, # change this number to the max number of steps to train for, feel free to change this number
         eval_interval=10_000,
         double_dqn=True,  # keep True for standard modern baseline
     ),
@@ -117,7 +117,7 @@ def train_step():
     return float(loss.item())
 
 # ===== Eval =====
-def eval_policy(n_episodes=15): # changed from 5 to 15
+def eval_policy(n_episodes=15): # change this number to the number of episodes to evaluate for, feel free to change this number
     total = 0.0
     for _ in range(n_episodes):
         o,_ = eval_env.reset()

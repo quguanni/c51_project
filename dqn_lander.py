@@ -12,7 +12,7 @@ wandb.init(
     group="lander",
     name="dqn-lander-1msteps",
     config=dict(
-        env_id="LunarLander-v3",
+        env_id="LunarLander-v3", # change this to the environment you want to train on
         seed=42,
         gamma=0.99,
 
@@ -26,10 +26,10 @@ wandb.init(
         epsilon_decay_steps=200_000,
 
     
-        train_start=10_000, # changed from 1_000 to 5_000
+        train_start=10_000, # bigger number means warmer start to reduce noisy updates, feel free to change this number
         train_freq=1,
         target_update_interval=500,
-        max_steps=1_000_000,
+        max_steps=1_000_000, # change this number to the max number of steps to train for, feel free to change this number
 
         # Evaluation
         eval_interval=20_000,

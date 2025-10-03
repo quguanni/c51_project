@@ -12,15 +12,15 @@ from tqdm import trange
 # ----- 0) W&B init -----
 wandb.init(
     project="c51-project",
-    group="lander",
-    name="c51-lander-nstep3-v1",
+    group="ablation",
+    name="c51-Cartpole-baseline-3step",
     config=dict(
-        env_id="LunarLander-v3",
+        env_id="CartPole-v1",
         seed=42,
 
         # C51 support tuned for Lander (~[-200, 300])
-        n_atoms=51,
-        v_min=-200.0,
+        n_atoms=51, # change this number to 21, 101, 151 for testing different number of atoms
+        v_min=-200.0, # change the bounds to match the bounds of the environment for testing different bounds
         v_max=300.0,
         gamma=0.99,
 
@@ -33,7 +33,7 @@ wandb.init(
         epsilon_decay_steps=200_000,
 
         # n-step
-        n_step=3,
+        n_step=3, # change this number to 1, 2, 4 for testing different n-step
         train_start=10_000,
         train_freq=1,
 
