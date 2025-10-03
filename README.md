@@ -29,3 +29,32 @@ Copyright (c) 2025 Guanni Qu
 Permission is hereby granted, free of charge, to any person obtaining a copy...
 [standard MIT text continues]
 
+---
+c51_project/
+├── training.py
+├── wandb_test.py
+├── checkpoints/
+│   ├── LunarLander-v3_c51_step{...}.pt
+│   └── dqn_step{...}.pt
+├── wandb/
+│   ├── run-YYYYMMDD_HHMMSS-<id>/
+│   │   ├── files/
+│   │   │   ├── config.yaml
+│   │   │   ├── requirements.txt
+│   │   │   ├── wandb-metadata.json
+│   │   │   ├── wandb-summary.json
+│   │   │   ├── output.log
+│   │   │   ├── checkpoints/  -> symlinks to ../checkpoints/*.pt
+│   │   │   └── media/
+│   │   │       └── images/
+│   │   │           └── dist_snapshot_*.png
+│   │   ├── logs/
+│   │   │   ├── debug.log
+│   │   │   ├── debug-internal.log
+│   │   │   └── debug-core.log -> ~/Library/Caches/wandb/logs/core-debug-*.log
+│   │   ├── run-*.wandb
+│   │   └── tmp/
+│   │       └── code/
+│   └── ... (many more runs)
+└── README.md
+---
