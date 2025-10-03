@@ -1,4 +1,5 @@
 # docs and experiment results can be found at https://docs.cleanrl.dev/rl-algorithms/c51/#c51_ataripy
+# for hyperparameters reference and comparison
 import os
 import random
 import time

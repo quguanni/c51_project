@@ -13,7 +13,7 @@ from tqdm import trange
 wandb.init(
     project="c51-project",
     group="lander",
-    name="c51-lander-0200",
+    name="c51-lander-0300",
     config=dict(
         env_id="LunarLander-v3",
         seed=42,

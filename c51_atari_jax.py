@@ -1,3 +1,6 @@
+# for hyperparameters reference and comparison
+
+
 import os
 import random
 import time

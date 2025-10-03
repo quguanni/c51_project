@@ -18,9 +18,9 @@ wandb.init(
         env_id="CartPole-v1",
         seed=42,
         # C51
-        n_atoms=51,
+        n_atoms=51, # change this number to 21, 101, 150 for testing different number of atoms
         v_min=0.0,
-        v_max=120.0,
+        v_max=120.0, # change the bounds to match the bounds of the environment for testing different bounds
         gamma=0.99,
 
         # Replay and Training
@@ -32,19 +32,19 @@ wandb.init(
         epsilon_decay_steps=25_000,
 
         # n-step
-        n_step=3,
-        train_start= 5000, # changed from 1000 to 5000, warmer start to reduce noisy updates
+        n_step=3, # change this number to 1, 2, 4 for testing different n-step
+        train_start= 5000, # bigger number means warmer start to reduce noisy updates, feel free to change this number
         train_freq=1,
 
         # target network
         target_update_interval=500,
 
         # eval and logging
-        max_steps=200_000,
+        max_steps=200_000, # change this number to the max number of steps to train for, feel free to change this number
         eval_interval=10_000,
-        eval_episodes=15,
+        eval_episodes=15, # change this number to the number of episodes to evaluate for, feel free to change this number
         snapshot_interval=20_000,
-        polyak_tau=0.005,
+        polyak_tau=0.005, # enable Polyak averaging
     ),
 )
 cfg = wandb.config

@@ -1,4 +1,3 @@
-# train_cartpole_dqn.py
 import os, random
 import numpy as np
 import torch, torch.nn as nn, torch.nn.functional as F
@@ -8,7 +7,6 @@ from tqdm import trange
 import wandb
 from math import inf
 
-# ===== W&B =====
 wandb.init(
     project="c51-project",
     group="lander",
@@ -17,17 +15,17 @@ wandb.init(
         env_id="LunarLander-v3",
         seed=42,
         gamma=0.99,
-        # Replay / Optimization
+
         buffer_size=200_000,
         batch_size=256,
         lr=3e-4,
 
-        # Epsilon-greedy Exploration
+
         epsilon_start=1.0,
         epsilon_end=0.05,
         epsilon_decay_steps=200_000,
 
-        # Training schedule and target network updates
+    
         train_start=10_000, # changed from 1_000 to 5_000
         train_freq=1,
         target_update_interval=500,
@@ -37,13 +35,12 @@ wandb.init(
         eval_interval=20_000,
 
         # Double DQN
-        double_dqn=True,  # keep True for standard modern baseline
+        double_dqn=True,
     ),
 )
 cfg = wandb.config
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# Safe getters with defaults (robust to missing config keys)
 GAMMA                  = float(getattr(cfg, "gamma", 0.99))
 BUFFER_SIZE            = int(getattr(cfg, "buffer_size", 200_000))
 BATCH_SIZE             = int(getattr(cfg, "batch_size", 256))
@@ -74,7 +71,7 @@ eval_env = gym.make(getattr(cfg, "env_id", "LunarLander-v2"))
 set_seed(env, int(getattr(cfg, "seed", 42)))
 set_seed(eval_env, int(getattr(cfg, "seed", 42)) + 1)
 
-# Flatten obs just in case shape changes later
+
 state_dim = int(np.prod(env.observation_space.shape))
 n_actions = env.action_space.n
 
