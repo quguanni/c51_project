@@ -8,5 +8,5 @@ python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 python dqn_cartpole.py 
 python dqn_lander.py
-python c51_cartpole_baseline.py
-
+python c51_cartpole.py
+python c51_lander.py
