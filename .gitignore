@@ -41,3 +41,10 @@ venv/
 c51_venv_resume/
 .venv/
 venv/
+
+# local virtualenvs
+c51_venv_lander/
+c51_venv_resume/
+c51_venv/
+.venv/
+venv/
