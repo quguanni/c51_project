@@ -30,11 +30,14 @@ checkpoints/
 *.pth
 *.log
 
+<<<<<<< HEAD
 # Local Python envs
 c51_venv_resume/
 .venv/
 venv/
 
+=======
+>>>>>>> 483a120b (added noisy and also edited the bounds)
 c51_venv_resume/
 .venv/
 venv/

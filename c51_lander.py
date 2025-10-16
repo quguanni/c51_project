@@ -15,7 +15,7 @@ wandb.init(
     group="lander",
     name="c51-lander_0200",
     config=dict(
-        env_id="CartPole-v1",
+        env_id="LunarLander-v3",
         seed=42,
 
         # C51 support tuned for Lander (~[-200, 300])
