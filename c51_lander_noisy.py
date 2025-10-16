@@ -12,7 +12,7 @@ from tqdm import trange
 # ---------- 0) W&B ----------
 wandb.init(
     project="c51-project",
-    group="lander",
+    group="lander_noisy",
     name="c51-lander_noisy_500kmax_-200300",
     config=dict(
         env_id="LunarLander-v3",
