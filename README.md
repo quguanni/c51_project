@@ -169,22 +169,18 @@ Per-run **steps_to_195** and summary (mean ± std).
 ## Project Structure
 ```
 c51_project/
-├─ src/
-│  ├─ agents/
-│  │  ├─ dqn.py
-│  │  ├─ c51.py
-│  │  └─ nets.py
-│  ├─ buffers/replay_buffer.py
-│  ├─ envs/make_env.py
-│  ├─ train.py
-│  ├─ evaluate.py
-│  ├─ plots.py
-│  └─ utils/{seed.py,log.py,metrics.py,checkpoint.py}
-├─ configs/ (optional yaml configs)
-├─ tests/ (unit tests; golden expected outputs)
-├─ results/
-├─ plots/
-└─ requirements.txt
+├─ c51_cartpole.py          # C51 on CartPole (n-step configurable)
+├─ dqn_cartpole.py          # DQN on CartPole
+├─ c51_lander.py            # C51 on LunarLander-v3 (ε-greedy)
+├─ c51_lander_noisy.py      # C51 + NoisyNets on LunarLander-v3
+├─ dqn_lander.py            # DQN on LunarLander-v3
+├─ checkpoints/             # model + optimizer checkpoints (large)
+├─ figs/                    # exported figures
+├─ requirements.txt
+├─ README.md
+├─ wandb/                   # local W&B runs (large)
+├─ c51_venv*/               # local virtualenvs (do not commit)
+└─ *.py                     # helpers / experiments (e.g., wandb_test.py)
 ```
 
 ---
