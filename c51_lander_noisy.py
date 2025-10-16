@@ -20,7 +20,7 @@ wandb.init(
 
         # C51 support tuned for LunarLander (~[-200, 300])
         n_atoms=51,          # try 21 / 51 / 101 in ablations
-        v_min=-200.0,        # try widening/narrowing in support ablations
+        v_min=0.0,        # try widening/narrowing in support ablations
         v_max=300.0,
         gamma=0.99,
 

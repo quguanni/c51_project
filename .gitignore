@@ -29,3 +29,8 @@ checkpoints/
 *.pt
 *.pth
 *.log
+
+# Local Python envs
+c51_venv_resume/
+.venv/
+venv/
