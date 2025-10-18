@@ -1,4 +1,4 @@
-# train_cartpole_c51.py
+# c51_cartpole.py
 import os, random, math
 import numpy as np
 import torch
