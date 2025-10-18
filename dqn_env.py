@@ -10,7 +10,7 @@ from math import inf
 wandb.init(
     project="c51-project",
     group="lander",
-    name="dqn-lander-1msteps",
+    name="dqn-lander-500ksteps",
     config=dict(
         env_id="LunarLander-v3", # change this to the environment you want to train on
         seed=42,
@@ -29,7 +29,7 @@ wandb.init(
         train_start=10_000, # bigger number means warmer start to reduce noisy updates, feel free to change this number
         train_freq=1,
         target_update_interval=500,
-        max_steps=1_000_000, # change this number to the max number of steps to train for, feel free to change this number
+        max_steps=500_000, # change this number to the max number of steps to train for, feel free to change this number
 
         eval_interval=20_000,
 
@@ -49,7 +49,7 @@ EPS_DECAY_STEPS        = int(getattr(cfg, "epsilon_decay_steps", 200_000))
 TRAIN_START            = int(getattr(cfg, "train_start", 10_000))
 TRAIN_FREQ             = int(getattr(cfg, "train_freq", 1))
 TARGET_UPDATE_INTERVAL = int(getattr(cfg, "target_update_interval", 1_000))
-MAX_STEPS              = int(getattr(cfg, "max_steps", 1_000_000))
+MAX_STEPS              = int(getattr(cfg, "max_steps", 500_000))
 EVAL_INTERVAL          = int(getattr(cfg, "eval_interval", 20_000))
 EVAL_EPISODES          = int(getattr(cfg, "eval_episodes", 20))
 DOUBLE_DQN             = bool(getattr(cfg, "double_dqn", True))

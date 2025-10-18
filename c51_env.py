@@ -15,7 +15,7 @@ wandb.init(
     group="lander",
     name="c51-lander_0200",
     config=dict(
-        env_id="LunarLander-v3",
+        env_id="LunarLander-v3", # change this to the environment you want to train on
         seed=42,
 
         # C51 support tuned for Lander (~[-200, 300])

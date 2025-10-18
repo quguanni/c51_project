@@ -12,9 +12,9 @@ from tqdm import trange
 wandb.init(
     project="c51-project",
     group="lander_noisy",
-    name="c51-lander_noisy_500kmax_-200300",
+    name="c51-lander_noisy",
     config=dict(
-        env_id="LunarLander-v3",
+        env_id="LunarLander-v3", # change this to the environment you want to train on
         seed=42,
 
         # C51 support tuned for LunarLander (~[-200, 300])
