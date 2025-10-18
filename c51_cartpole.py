@@ -9,7 +9,6 @@ from collections import deque, namedtuple
 import wandb
 from tqdm import trange
 
-# ----- 0) W&B init -----
 wandb.init(
     project="c51-project",
     group="ablation",
@@ -50,7 +49,6 @@ wandb.init(
 cfg = wandb.config
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# ----- 1) Set seed -----
 def set_seed(env, seed):
     random.seed(seed); np.random.seed(seed); torch.manual_seed(seed)
     try:
@@ -60,14 +58,12 @@ def set_seed(env, seed):
         pass
 
 
-# ----- 2) Create environment -----
 env = gym.make(cfg.env_id)
 eval_env = gym.make(cfg.env_id)
 set_seed(env, cfg.seed); set_seed(eval_env, cfg.seed + 1)
 n_actions = env.action_space.n
 state_dim = env.observation_space.shape[0]
 
-# ----- 3) Replay Buffer + n step queue -----
 Transition = namedtuple("Transition", ["s", "a", "r", "s2", "d"])
 
 class ReplayBuffer:
@@ -109,7 +105,6 @@ def push_n_step(s, a, r, s2, done, buffer):
 
 
 
-# ----- 4) C51 Network -----
 class C51Net(nn.Module):
     def __init__(self, state_dim, n_actions, n_atoms, v_min, v_max):
         super().__init__()
@@ -140,7 +135,6 @@ class C51Net(nn.Module):
         q = torch.sum(prob * self.support, dim=-1)  # (B, n_actions)
         return q
 
-# ----- 5) Online & Target Networks -----
 
 online = C51Net(state_dim, n_actions, cfg.n_atoms, cfg.v_min, cfg.v_max).to(device)
 target = C51Net(state_dim, n_actions, cfg.n_atoms, cfg.v_min, cfg.v_max).to(device)
@@ -153,7 +147,6 @@ def polyak_update(online, target, tau=0.005):
             p_t.data.mul_(1 - tau).add_(tau * p_o.data)
 
 
-# ----- 6) Epsilon Greedy Exploration -----
 def epsilon_by_step(step):
     eps_start, eps_end, eps_decay = cfg.epsilon_start, cfg.epsilon_end, cfg.epsilon_decay_steps
     t = min(1.0, step / eps_decay)
@@ -169,7 +162,6 @@ def select_action(state, step):
         a = int(torch.argmax(q, dim=1).item())
         return a, eps
 
-# ----- 7) Distribution Projection -----
 
 def project_distribution(next_dist, rewards, dones, gamma, v_min, v_max, support):
     # next_dist: (B, n_atoms)  probabilities for chosen next action
@@ -196,7 +188,6 @@ def project_distribution(next_dist, rewards, dones, gamma, v_min, v_max, support
                 m[i, uj] += pj * (b[i, j] - lj)
     return m
 
-# ----- 8) One Training Step to Optimize Loss -----
 
 def train_step():
     if len(buffer) < cfg.train_start:
@@ -228,7 +219,6 @@ def train_step():
     return float(loss.item())
 
 
-# ----- 9) Distribution Snapshot ----- 
 
 def log_distribution_snapshot(env, step, title="reset_state"):
     # Safe, backend-agnostic plotting; won't crash training
@@ -255,8 +245,6 @@ def log_distribution_snapshot(env, step, title="reset_state"):
     except Exception as e:
         wandb.log({"snapshot_error": str(e), "snapshot_step": step})
 
-
-# ----- 10) Checkpointing helper to resume training -----
 
 def find_latest_checkpoint():
     files = glob.glob("checkpoints/c51_step*.pt")
@@ -293,7 +281,6 @@ def try_resume():
     print(f"[RESUME] Loaded {latest} and optimizer ({os.path.exists(opt_path)})")
     return step
 
-# ----- 11) Training Loop -----
 
 os.makedirs("checkpoints", exist_ok=True)
 
