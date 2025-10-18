@@ -31,10 +31,8 @@ wandb.init(
         target_update_interval=500,
         max_steps=1_000_000, # change this number to the max number of steps to train for, feel free to change this number
 
-        # Evaluation
         eval_interval=20_000,
 
-        # Double DQN
         double_dqn=True,
     ),
 )
@@ -56,7 +54,6 @@ EVAL_INTERVAL          = int(getattr(cfg, "eval_interval", 20_000))
 EVAL_EPISODES          = int(getattr(cfg, "eval_episodes", 20))
 DOUBLE_DQN             = bool(getattr(cfg, "double_dqn", True))
 
-# ===== Seeding =====
 def set_seed(env, seed):
     random.seed(seed); np.random.seed(seed); torch.manual_seed(seed)
     try: 
@@ -65,7 +62,6 @@ def set_seed(env, seed):
     except Exception: 
         pass
 
-# ===== Env =====
 env = gym.make(getattr(cfg, "env_id", "LunarLander-v2"))
 eval_env = gym.make(getattr(cfg, "env_id", "LunarLander-v2"))
 set_seed(env, int(getattr(cfg, "seed", 42)))
@@ -75,7 +71,6 @@ set_seed(eval_env, int(getattr(cfg, "seed", 42)) + 1)
 state_dim = int(np.prod(env.observation_space.shape))
 n_actions = env.action_space.n
 
-# ===== Replay Buffer =====
 Transition = namedtuple("Transition", ["s","a","r","s2","d"])
 class ReplayBuffer:
     def __init__(self, capacity): self.buf = deque(maxlen=capacity)
@@ -101,7 +96,7 @@ class QNet(nn.Module):
             nn.Linear(128, 128), nn.ReLU(),
             nn.Linear(128, n_actions),
         )
-    def forward(self, x): return self.net(x)  # (B, n_actions)
+    def forward(self, x): return self.net(x) 
 
 online = QNet(state_dim, n_actions).to(device)
 target = QNet(state_dim, n_actions).to(device)
@@ -122,21 +117,20 @@ def select_action(state, step):
         q = online(s)
         return int(q.argmax(dim=1)), eps
 
-# ===== One training step =====
 def train_step():
     if len(buffer) < TRAIN_START: return None
     s,a,r,s2,d = buffer.sample(BATCH_SIZE)
 
     with torch.no_grad():
         if DOUBLE_DQN:
-            # a* from online, value from target (Double DQN)
-            a_star = online(s2).argmax(dim=1)                       # (B,)
-            q_next = target(s2).gather(1, a_star.unsqueeze(1)).squeeze(1)  # (B,)
+            
+            a_star = online(s2).argmax(dim=1)                       
+            q_next = target(s2).gather(1, a_star.unsqueeze(1)).squeeze(1)  
         else:
-            q_next = target(s2).max(dim=1).values                   # (B,)
-        target_q = r + (1.0 - d) * GAMMA * q_next               # (B,)
+            q_next = target(s2).max(dim=1).values                   
+        target_q = r + (1.0 - d) * GAMMA * q_next               
 
-    q = online(s).gather(1, a.unsqueeze(1)).squeeze(1)              # (B,)
+    q = online(s).gather(1, a.unsqueeze(1)).squeeze(1)             
     loss = F.smooth_l1_loss(q, target_q)   # Huber loss
 
     optim.zero_grad()
@@ -145,7 +139,6 @@ def train_step():
     optim.step()
     return float(loss.item())
 
-# ===== Eval =====
 def eval_policy(n_episodes=None): 
     n_eps = int(n_episodes or EVAL_EPISODES)
     total = 0.0
@@ -161,7 +154,6 @@ def eval_policy(n_episodes=None):
             total += r
     return total / n_eps
 
-# ===== Loop =====
 os.makedirs("checkpoints", exist_ok=True)
 global_step, episode, ep_return = 0, 0, 0.0
 obs,_ = env.reset()
@@ -180,22 +172,18 @@ for _ in pbar:
     ep_return += reward
     global_step += 1
 
-    # train
     loss = train_step()
     if loss is not None:
         wandb.log({"step": global_step, "loss": loss, "epsilon": eps})
 
-    # episode end
     if done:
         wandb.log({"step": global_step, "episode_return": ep_return})
         ep_return = 0.0; episode += 1
         obs,_ = env.reset()
 
-    # target sync
     if global_step % TARGET_UPDATE_INTERVAL == 0:
         target.load_state_dict(online.state_dict())
 
-    # periodic eval + checkpoint
     if EVAL_INTERVAL and (global_step % EVAL_INTERVAL == 0):
         eval_ret = eval_policy()
         best_eval = max(best_eval, eval_ret)
