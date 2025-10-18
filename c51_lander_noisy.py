@@ -9,7 +9,6 @@ from collections import deque, namedtuple
 import wandb
 from tqdm import trange
 
-# ---------- 0) W&B ----------
 wandb.init(
     project="c51-project",
     group="lander_noisy",
@@ -24,7 +23,6 @@ wandb.init(
         v_max=300.0,
         gamma=0.99,
 
-        # Replay & Training
         buffer_size=200_000,
         batch_size=256,
         lr=5e-4,
@@ -60,7 +58,6 @@ wandb.init(
 cfg = wandb.config
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# ---------- 1) Seeding ----------
 def set_seed(env, seed):
     random.seed(seed); np.random.seed(seed); torch.manual_seed(seed)
     try:
@@ -69,14 +66,12 @@ def set_seed(env, seed):
     except Exception:
         pass
 
-# ---------- 2) Env ----------
 env = gym.make(cfg.env_id)
 eval_env = gym.make(cfg.env_id)
 set_seed(env, cfg.seed); set_seed(eval_env, cfg.seed + 1)
 n_actions = env.action_space.n
 state_dim = int(np.prod(env.observation_space.shape))
 
-# ---------- 3) Replay Buffer + n-step ----------
 Transition = namedtuple("Transition", ["s", "a", "r", "s2", "d"])
 class ReplayBuffer:
     def __init__(self, capacity): self.buf = deque(maxlen=capacity)
@@ -110,7 +105,6 @@ def push_n_step(s, a, r, s2, done, buffer):
     if dN:
         nq.clear()
 
-# ---------- 4) NoisyLinear (Factorized) ----------
 class NoisyLinear(nn.Module):
     """
     Factorized NoisyNet layer (Fortunato et al., 2018).
@@ -153,7 +147,6 @@ class NoisyLinear(nn.Module):
         b = self.mu_bias   + self.sigma_bias   * f_p
         return F.linear(x, w, b)
 
-# ---------- 5) C51 Network ----------
 class C51Net(nn.Module):
     def __init__(self, state_dim, n_actions, n_atoms, v_min, v_max, *, use_noisy=True, noisy_sigma_init=0.5):
         super().__init__()
@@ -189,7 +182,6 @@ class C51Net(nn.Module):
         q = torch.sum(prob * self.support, dim=-1)  # (B, A)
         return q
 
-# ---------- 6) Nets / Optim ----------
 online = C51Net(
     state_dim, n_actions, cfg.n_atoms, cfg.v_min, cfg.v_max,
     use_noisy=bool(cfg.use_noisy), noisy_sigma_init=float(cfg.noisy_sigma_init)
@@ -206,7 +198,6 @@ def polyak_update(online, target, tau):
         for p_t, p_o in zip(target.parameters(), online.parameters()):
             p_t.data.mul_(1 - tau).add_(tau * p_o.data)
 
-# ---------- 7) Action selection ----------
 def epsilon_by_step(step):
     t = min(1.0, step / cfg.epsilon_decay_steps)
     return float(cfg.epsilon_start + t * (cfg.epsilon_end - cfg.epsilon_start))
@@ -229,7 +220,6 @@ def select_action(state, step):
         a = int(torch.argmax(q, dim=1).item())
     return a, eps
 
-# ---------- 8) Projection ----------
 def project_distribution(next_dist, rewards, dones, gamma_eff, v_min, v_max, support):
     B, n_atoms = next_dist.shape
     delta_z = (v_max - v_min) / (n_atoms - 1)
@@ -248,7 +238,6 @@ def project_distribution(next_dist, rewards, dones, gamma_eff, v_min, v_max, sup
                 m[i, uj] += pj * (b[i, j] - lj)
     return m
 
-# ---------- 9) Train step ----------
 def train_step():
     if len(buffer) < cfg.train_start:
         return None
@@ -271,7 +260,6 @@ def train_step():
     optim.step()
     return float(loss.item())
 
-# ---------- 10) Snapshot (robust) ----------
 def log_distribution_snapshot(env_, step, title="reset_state"):
     try:
         import matplotlib
@@ -294,7 +282,6 @@ def log_distribution_snapshot(env_, step, title="reset_state"):
     except Exception as e:
         wandb.log({"snapshot_error": str(e), "snapshot_step": step})
 
-# ---------- 11) Checkpointing (env-scoped + meta) ----------
 def ckpt_prefix():
     safe_env = str(cfg.env_id).replace("/", "_")
     noisy_tag = "noisy" if bool(cfg.use_noisy) else "eps"
@@ -357,7 +344,6 @@ def try_resume():
     print(f"[RESUME] Loaded {latest} (step {step}), optimizer={os.path.exists(opt_path)}")
     return step
 
-# ---------- 12) Training loop ----------
 os.makedirs(cfg.ckpt_dir, exist_ok=True)
 global_step = try_resume()
 episode = 0
