@@ -1,0 +1,22 @@
+#CartPole.yaml
+env_id: CartPole-v1
+seed: 42
+gamma: 0.99
+buffer_size: 100000
+batch_size: 128
+lr: 3e-4
+epsilon_start: 1.0
+epsilon_end: 0.01
+epsilon_decay_steps: 25000
+target_update_interval: 500
+train_start: 5000
+train_freq: 1
+max_steps: 200000
+eval_interval: 10000
+eval_episodes: 15
+snapshot_interval: 20000
+polyak_tau: 0.005
+n_step: 3
+n_atoms: 51
+v_min: 0.0
+v_max: 120.0  
