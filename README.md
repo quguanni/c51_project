@@ -1,5 +1,5 @@
 
-# C51 Project — A Clean, Reproducible Distributional DQN (C51) Baseline
+# C51 Project — A Clean, Reproducible Distributional DQN (C51) Baseline with n-step returns, Polyak averaging, and Double DQN, benchmarked against a matched DQN baseline
 
 Minimal, readable reproduction of **C51** vs a matched **DQN** baseline, with optional **n-step** returns and ablations (atoms, support bounds, eval protocol). Focus: **determinism, simple configs, and plot-ready outputs**.
 
